@@ -55,3 +55,60 @@ function muvin_setup(){
 	}
 }
 add_action( 'init', 'muvin_setup' );
+
+/**
+ * Load theme plugins
+ * 
+**/
+function cfct_load_plugins() {
+    $files = cfct_files(CFCT_PATH.'plugins');
+    if (count($files)) {
+        foreach ($files as $file) {
+            if (file_exists(CFCT_PATH.'plugins/'.$file)) {
+                include_once(CFCT_PATH.'plugins/'.$file);
+            }
+// child theme support
+            if (file_exists(STYLESHEETPATH.'/plugins/'.$file)) {
+                include_once(STYLESHEETPATH.'/plugins/'.$file);
+            }
+        }
+    }
+}
+
+/**
+ * Get a list of php files within a given path as well as files in corresponding child themes
+ * 
+ * @param sting $path Path to the directory to search
+ * @return array Files within the path directory
+ * 
+**/
+function muvin_files($path) {
+    $files = apply_filters('cfct_files_'.$path, false);
+    if ($files) {
+        return $files;
+    }
+    $files = wp_cache_get('cfct_files_'.$path, 'cfct');
+    if ($files) {
+        return $files;
+    }
+    $files = array();
+    $paths = array($path);
+    if (STYLESHEETPATH.'/' != CFCT_PATH) {
+        // load child theme files
+        $paths[] = STYLESHEETPATH.'/'.str_replace(CFCT_PATH, '', $path);
+    }
+    foreach ($paths as $path) {
+        if (is_dir($path) && $handle = opendir($path)) {
+            while (false !== ($file = readdir($handle))) {
+                $path = trailingslashit($path);
+                if (is_file($path.$file) && strtolower(substr($file, -4, 4)) == ".php") {
+                    $files[] = $file;
+                }
+            }
+            closedir($handle);
+        }
+    }
+    $files = array_unique($files);
+    wp_cache_set('cfct_files_'.$path, $files, 'cfct', 3600);
+    return $files;
+}
