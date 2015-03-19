@@ -20,32 +20,46 @@
 	<body>
 		<header>
 			<nav class="navbar navbar-default navbar-fixed-top">
-  				<div class="container">
-					
-					<div class="navbar-header">
-			          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-			            <span class="sr-only">Toggle navigation</span>
-			            <i class="fa fa-bars"></i>
-			          </button>
-			          <a class="navbar-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'title' ); ?></a>
-			        </div>
-				
-			        
-					<?php wp_nav_menu( array(  'theme_location' => 'main'  , 'menu_class' => 'nav navbar-nav' ); ?>
-
-					<div class="header_toggle_menu">
-						<div class="open_toogle_menu">
-							<i class="fa fa-bars"></i>
-						</div>
-						<div class="close_toogle_menu">
-							<i class="fa fa-times"></i>
-						</div>
+			  <div class="container">
+			    <?php 
+			    	$args = array(
+							'post_type' => 'page',
+							'post_status' => 'publish'
+						);
+					$pages = get_pages($args);
+					$cont =0;
+					foreach ($pages as $page):
+						$title = $page->post_title;
+						$slug = $page->post_name;
+			    ?>
+			    	<li <?php if($cont == 0) print 'class="active"' ?> ><a href="#<?php print $slug?>"><?php print $title ?></a></li>
+				<?php 
+					$cont++;
+					endforeach;
+				 ?>
+				<div class="header_toggle_menu">
+					<div class="open_toogle_menu">
+						<i class="fa fa-bars"></i>
 					</div>
-			  	</div>
+					<div class="close_toogle_menu">
+						<i class="fa fa-times"></i>
+					</div>
+				</div>
+			  </div>
 			</nav>
 		</header>
 		<main id="content">
-			
+			<?php
+				foreach ($pages as $page):
+					$content = apply_filters('the_content', $page->post_content);
+				    $title = $page->post_title;
+				    $slug = $page->post_name;
+			?>
+			<section id="<?php print $slug?>">
+				<h2><?php print $title ?></h2>
+				<?php print $content ?>
+			</section>
+			<?php endforeach; ?>
 		</main>
 		<footer>
 			<?php wp_nav_menu( array(  'theme_location' => 'footer' ) ); ?> 
