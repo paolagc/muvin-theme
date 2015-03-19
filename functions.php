@@ -60,6 +60,9 @@ function muvin_setup(){
 	if ( function_exists( 'add_theme_support' ) ) { 
 	    add_theme_support( 'post-thumbnails' ,array('post', 'page'));
 	}
+
+    // custom post thumbnail sizes
+    add_image_size( 'grid6', 570, 260, true );
 }
 add_action( 'init', 'muvin_setup' );
 
