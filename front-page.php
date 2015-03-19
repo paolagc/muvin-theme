@@ -21,45 +21,58 @@
 		<header>
 			<nav class="navbar navbar-default navbar-fixed-top">
 			  <div class="container">
-			    <?php 
-			    	$args = array(
-							'post_type' => 'page',
-							'post_status' => 'publish'
-						);
-					$pages = get_pages($args);
-					$cont =0;
-					foreach ($pages as $page):
-						$title = $page->post_title;
-						$slug = $page->post_name;
-			    ?>
-			    	<li <?php if($cont == 0) print 'class="active"' ?> ><a href="#<?php print $slug?>"><?php print $title ?></a></li>
-				<?php 
-					$cont++;
-					endforeach;
-				 ?>
-				<div class="header_toggle_menu">
-					<div class="open_toogle_menu">
-						<i class="fa fa-bars"></i>
+			  	<div class="navbar-header">
+			  		<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+				        <span class="sr-only">Toggle navigation</span>
+				        <i class="fa fa-bars"></i>
+				    </button>
+					<a href="<?php bloginfo('url'); ?>" class="navbar-brand" title="<?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a>			  	</div>	
+			    
+				<div class="navbar-collapse collapse">
+					<ul id="main-menu" class="nav navbar-nav navbar-right">
+						<?php 
+					    	$args = array(
+									'post_type' => 'page',
+									'post_status' => 'publish'
+								);
+							$pages = get_pages($args);
+							$cont =0;
+							foreach ($pages as $page):
+								$title = $page->post_title;
+								$slug = $page->post_name;
+					    ?>
+					    	<li <?php if($cont == 0) print 'class="active"' ?> ><a href="#<?php print $slug?>"><?php print $title ?></a></li>
+						<?php 
+							$cont++;
+							endforeach;
+						 ?>
+					</ul>
+					<div class="header_toggle_menu pull-right">
+						<div id="open_toogle_menu">
+							<i class="fa fa-bars"></i>
+						</div>
+						<div id="close_toogle_menu">
+							<i class="fa fa-times"></i>
+						</div>
 					</div>
-					<div class="close_toogle_menu">
-						<i class="fa fa-times"></i>
-					</div>
-				</div>
+				</div> 
 			  </div>
 			</nav>
 		</header>
 		<main id="content">
-			<?php
+			<div class="container">
+				<?php
 				foreach ($pages as $page):
 					$content = apply_filters('the_content', $page->post_content);
 				    $title = $page->post_title;
 				    $slug = $page->post_name;
-			?>
-			<section id="<?php print $slug?>">
-				<h2><?php print $title ?></h2>
-				<?php print $content ?>
-			</section>
-			<?php endforeach; ?>
+				?>
+				<section id="<?php print $slug?>">
+					<h2><?php print $title ?></h2>
+					<?php print $content ?>
+				</section>
+				<?php endforeach; ?>
+			</div>
 		</main>
 		<footer>
 			<?php wp_nav_menu( array(  'theme_location' => 'footer' ) ); ?> 

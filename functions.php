@@ -11,17 +11,24 @@ function muvin_enqueue_css() {
 	//plugins
 	wp_enqueue_style('bootstrap', get_template_directory_uri(). '/css/bootstrap.min.css', 'style');
 
+    //font awesome icons
+    wp_enqueue_style( 'font-awesome', get_template_directory_uri() . '/css/font-awesome.css' );
+
+
 	//custom
 	wp_enqueue_style('header', get_template_directory_uri(). '/css/header.css');
 	wp_enqueue_style('footer', get_template_directory_uri(). '/css/footer.css');
-	wp_enqueue_style('style', get_template_directory_uri() . '/style.css', 'style');
+	wp_enqueue_style('style', get_template_directory_uri());
 }
+add_action( 'wp_enqueue_scripts', 'muvin_enqueue_css');
 
 function muvin_enqueue_scripts() {	
 	//load js files
-	wp_enqueue_script("jquery");
+	wp_enqueue_script('jquery');
 	wp_enqueue_script('bootstrap', get_template_directory_uri() . '/js/bootstrap.min.js','jquery', '1.4.8', TRUE);
+    wp_enqueue_script('app', get_template_directory_uri() . '/js/app.js','jquery', '1.0', TRUE);
 }
+add_action( 'wp_enqueue_scripts', 'muvin_enqueue_scripts' );
 
 function muvin_setup(){
 
